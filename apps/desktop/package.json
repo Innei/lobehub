@@ -42,7 +42,7 @@
     "update-server": "sh scripts/update-test/run-test.sh"
   },
   "dependencies": {
-    "@napi-rs/canvas": "^0.1.70"
+    "@napi-rs/canvas": "^0.1.98"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
