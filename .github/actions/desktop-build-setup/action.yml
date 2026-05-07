@@ -17,14 +17,31 @@ inputs:
     description: GitHub token with permission to read the Cloud repository
     required: false
     default: ''
+  skip-setup-env:
+    description: Skip setup-env and use tools preinstalled on a self-hosted runner
+    required: false
+    default: 'false'
 
 runs:
   using: composite
   steps:
     - name: Setup environment
+      if: inputs.skip-setup-env != 'true'
       uses: ./.github/actions/setup-env
       with:
         node-version: ${{ inputs.node-version }}
+
+    - name: Check self-hosted toolchain
+      if: inputs.skip-setup-env == 'true'
+      shell: bash
+      run: |
+        set -euo pipefail
+        node --version
+        npm --version
+        if ! command -v pnpm >/dev/null 2>&1; then
+          corepack enable
+        fi
+        pnpm --version
 
     - name: Overlay Cloud repository for desktop build
       if: inputs.cloud-token != ''

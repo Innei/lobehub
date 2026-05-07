@@ -51,11 +51,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          package-manager-cache: false
+      - name: Check self-hosted Node.js
+        run: |
+          node --version
+          npm --version
 
       - name: Set version
         id: set_version
@@ -103,6 +102,7 @@ jobs:
         with:
           cloud-token: ${{ secrets.LOBEHUB_CLOUD_TOKEN }}
           node-version: ${{ env.NODE_VERSION }}
+          skip-setup-env: 'true'
 
       - name: Set package version
         run: npm run workflow:set-desktop-version ${{ needs.version.outputs.version }} ${{ inputs.channel }}
@@ -259,10 +259,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Setup environment
-        uses: ./.github/actions/setup-env
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+      - name: Check self-hosted toolchain
+        run: |
+          node --version
+          npm --version
+          if ! command -v pnpm >/dev/null 2>&1; then
+            corepack enable
+          fi
+          pnpm --version
+          bun --version
 
       - name: Download artifacts
         uses: actions/download-artifact@v7
