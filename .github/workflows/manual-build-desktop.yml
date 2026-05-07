@@ -45,7 +45,7 @@ env:
 jobs:
   version:
     name: Determine version
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       version: ${{ steps.set_version.outputs.version }}
     steps:
@@ -92,12 +92,9 @@ jobs:
 
   build-macos:
     needs: [version]
-    name: Build Desktop App (macOS)
+    name: Build Desktop App (macOS ARM)
     if: inputs.build_macos
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-latest, macos-15-intel]
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v6
 
@@ -117,14 +114,15 @@ jobs:
           APP_URL: http://localhost:3015
           DATABASE_URL: 'postgresql://postgres@localhost:5432/postgres'
           KEY_VAULTS_SECRET: 'oLXWIiR/AKF+rWaqy9lHkrYgzpATbW3CtJp3UfkVgpE='
-          CSC_LINK: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
-          CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+          CSC_LINK: ''
+          CSC_KEY_PASSWORD: ''
           NEXT_PUBLIC_DESKTOP_PROJECT_ID: ${{ inputs.channel == 'stable' && secrets.UMAMI_STABLE_DESKTOP_PROJECT_ID || secrets.UMAMI_BETA_DESKTOP_PROJECT_ID }}
           NEXT_PUBLIC_DESKTOP_UMAMI_BASE_URL: ${{ inputs.channel == 'stable' && secrets.UMAMI_STABLE_DESKTOP_BASE_URL || secrets.UMAMI_BETA_DESKTOP_BASE_URL }}
           CSC_FOR_PULL_REQUEST: true
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_ID: ''
+          APPLE_APP_SPECIFIC_PASSWORD: ''
+          APPLE_TEAM_ID: ''
 
       - name: Rename macOS latest-mac.yml for multi-architecture support
         if: runner.os == 'macOS'
@@ -149,7 +147,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v6
         with:
-          name: release-${{ matrix.os }}
+          name: release-macos-arm64
           path: |
             apps/desktop/release/latest*
             apps/desktop/release/*.dmg*
@@ -253,7 +251,7 @@ jobs:
   merge-mac-files:
     needs: [build-macos, version]
     name: Merge macOS Release Files
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
     if: inputs.build_macos
