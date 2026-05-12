@@ -174,6 +174,7 @@ export function defineConfig() {
     '/api/workflows(.*)',
     '/api/agent(.*)',
     '/api/dev(.*)',
+    '/api/bench(.*)',
     '/webapi(.*)',
     '/trpc(.*)',
     // version
