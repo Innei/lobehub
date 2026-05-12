@@ -1,5 +1,5 @@
 {
-  "buildCommand": "bun run build:vercel",
+  "buildCommand": "bun run build:next",
   "headers": [
     {
       "source": "/_spa/(.*)",

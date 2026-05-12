@@ -22,6 +22,8 @@ Object.assign(process.env, loadEnv(mode, process.cwd(), ''));
 
 const isDev = process.env.NODE_ENV !== 'production';
 const platform = isMobile ? 'mobile' : 'web';
+const nextDevPort = process.env.PORT || 3010;
+const trpcDevPort = process.env.LOBE_DEV_TRPC_PORT || nextDevPort;
 
 const resolveCommandExecutable = (cmd: string) => {
   const pathValue = process.env.PATH;
@@ -286,10 +288,10 @@ export default defineConfig({
     host: true,
     port: 9876,
     proxy: {
-      '/api': `http://localhost:${process.env.PORT || 3010}`,
-      '/oidc': `http://localhost:${process.env.PORT || 3010}`,
-      '/trpc': `http://localhost:${process.env.PORT || 3010}`,
-      '/webapi': `http://localhost:${process.env.PORT || 3010}`,
+      '/api': `http://localhost:${nextDevPort}`,
+      '/oidc': `http://localhost:${nextDevPort}`,
+      '/trpc': `http://localhost:${trpcDevPort}`,
+      '/webapi': `http://localhost:${nextDevPort}`,
     },
     warmup: {
       clientFiles: [

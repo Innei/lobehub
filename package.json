@@ -69,6 +69,8 @@
     "dev:next": "next dev -p 3010",
     "dev:spa": "vite --port 9876",
     "dev:spa:mobile": "cross-env MOBILE=true vite --port 3012",
+    "dev:spa:trpc": "cross-env LOBE_DEV_TRPC_PORT=3011 vite --port 9876",
+    "dev:trpc": "bun src/server/trpc-hono/dev-server.ts",
     "docs:cdn": "npm run workflow:docs-cdn && npm run lint:mdx",
     "docs:i18n": "lobe-i18n md && npm run lint:mdx",
     "docs:seo": "lobe-seo && npm run lint:mdx",
