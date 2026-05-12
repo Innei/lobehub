@@ -18,6 +18,19 @@ const vercelConfig = {
       'packages/database/migrations/**',
     ],
   },
+  outputFileTracingIncludes: {
+    '/api/bench/hono-dist/\\[\\[\\.\\.\\.path\\]\\]': [
+      './packages/hono-dist-bench/dist/**',
+      './packages/hono-dist-bench/package.json',
+    ],
+  },
+  serverExternalPackages: [
+    '@chat-adapter/discord',
+    '@discordjs/ws',
+    '@lobechat/hono-dist-bench',
+    '@napi-rs/canvas',
+    'discord.js',
+  ],
 };
 const nextConfig = defineConfig({
   ...(isVercel ? vercelConfig : {}),

@@ -1,5 +1,5 @@
 {
-  "buildCommand": "bun run build:next",
+  "buildCommand": "bun run build:hono-dist && bun run build:next",
   "framework": "nextjs",
   "headers": [
     {
