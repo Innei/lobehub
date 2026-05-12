@@ -1,5 +1,6 @@
 {
   "buildCommand": "bun run build:next",
+  "framework": "nextjs",
   "headers": [
     {
       "source": "/_spa/(.*)",
